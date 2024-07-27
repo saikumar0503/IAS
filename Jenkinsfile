@@ -1,61 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/POM/4.0.0/maven-4.0.0.xsd">
-
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.iaspvt</groupId>
-    <artifactId>project-s</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-
-    <name>Project S</name>
-    <description>A Maven project with JUnit 5</description>
-
-    <dependencies>
-        <!-- JUnit 5 dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.8.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.8.2</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- Add other dependencies as needed -->
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>11</source> <!-- or your preferred Java version -->
-                    <target>11</target> <!-- or your preferred Java version -->
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
-                <configuration>
-                    <includeDependencies>true</includeDependencies>
-                </configuration>
-            </plugin>
-            <!-- Add other plugins if needed -->
-        </plugins>
-    </build>
-
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source> <!-- or your preferred Java version -->
-        <maven.compiler.target>11</maven.compiler.target> <!-- or your preferred Java version -->
-    </properties>
-
-</project>
+pipeline{
+    agent any
+    
+    environment{
+        PATH = "/opt/maven3/bin:$PATH"
+    }
+    stages{
+        stage("Git Checkout"){
+            steps{
+                git credentialsId: 'IAS-new', url: 'https://github.com/srinivas1987devops/myweb.git'
+            }
+        }
+        stage("Maven Build"){
+            steps{
+                sh "mvn clean package"
+                sh "mv target/*.jar target/myweb.war"
+            }
+        }
+        stage("deploy-dev"){
+            steps{
+                sshagent(['IAS-one']) {
+                sh """
+                    scp -o StrictHostKeyChecking=no target/myweb.war  ec2-user@172.16.10.246:/opt/tomcat/webapps
+                    
+                    ssh ec2-user@172.16.10.246 /opt/tomcat/bin/shutdown.sh
+                    
+                    ssh ec2-user@172.16.10.246 /opt/tomcat/bin/startup.sh
+                
+                """
+            }
+            
+            }
+        }
+    }
+}
