@@ -8,7 +8,7 @@ pipeline{
     stages{
         stage("Git Checkout"){
             steps{
-                git credentialsId: 'IAS-new', url: 'https://github.com/saikumar0503/maven.git'
+                git credentialsId: 'IAS-new', url: 'https://github.com/saikumar0503/IAS.git'
             }
         }
         stage("Maven Build"){
