@@ -1,62 +1,57 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/POM/4.0.0/maven-4.0.0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.iaspvt</groupId>
     <artifactId>project-s</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
-
+    <version>1.0.0</version>
     <name>Project S</name>
-    <description>A Maven project with JUnit 5</description>
-
+    <url>http://maven.apache.org</url>
+    
+    <properties>
+        <docker.image.prefix>kammana</docker.image.prefix>
+        <sonar.host.url>http://18.181.164.81:9000/</sonar.host.url>
+    </properties>
+    
     <dependencies>
-        <!-- JUnit 5 dependencies -->
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.8.2</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.8.2</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- Add other dependencies as needed -->
     </dependencies>
-
+    
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version> <!-- Updated version -->
+                <version>3.3.2</version>
                 <configuration>
-                    <webxml>src/main/webapp/WEB-INF/web.xml</webxml>     
-                    <source>1.8</source> <!-- or your preferred Java version -->
-                    <target>1.8</target> <!-- or your preferred Java version -->
+                    <webxml>src/main/webapp/WEB-INF/web.xml</webxml>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
-                <configuration>
-                    <includeDependencies>true</includeDependencies>
-                </configuration>
-            </plugin>
-            <!-- Add other plugins if needed -->
         </plugins>
     </build>
-
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source> <!-- or your preferred Java version -->
-        <maven.compiler.target>1.8</maven.compiler.target> <!-- or your preferred Java version -->
-    </properties>
-
+    
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexusRepo</id>
+            <url>http://54.178.74.89:8081/repository/sample-snapshots/</url>
+        </snapshotRepository>
+        
+        <repository>
+            <id>nexusRepo</id>
+            <url>http://54.178.74.89:8081/repository/sample-releases/</url>
+        </repository>
+    </distributionManagement>
+    
+    <pluginRepositories>
+        <pluginRepository>    
+            <id>maven1</id>
+            <name>Maven.org</name>
+            <url>http://repo1.maven.org/maven2</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
