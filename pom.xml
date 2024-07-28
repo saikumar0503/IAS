@@ -37,6 +37,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version> <!-- Updated version -->
                 <configuration>
+                    <webxml>src/main/webapp/WEB-INF/web.xml</webxml>     
                     <source>1.8</source> <!-- or your preferred Java version -->
                     <target>1.8</target> <!-- or your preferred Java version -->
                 </configuration>
