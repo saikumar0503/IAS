@@ -7,7 +7,7 @@ pipeline{
     stages{
         stage("Git Checkout"){
             steps{
-                git credentialsId: 'IAS-new', url: 'https://github.com/srinivas1987devops/myweb.git'
+                git credentialsId: 'IAS-new', url: 'https://github.com/saikumar0503/IAS.git'
             }
         }
         stage("Maven Build"){
@@ -20,11 +20,11 @@ pipeline{
             steps{
                 sshagent(['IAS-one']) {
                 sh """
-                    scp -o StrictHostKeyChecking=no target/myweb.war  ec2-user@172.16.10.246:/opt/tomcat/webapps
+                    scp -o StrictHostKeyChecking=no target/myweb.war  ec2-user@172.16.10.249:/opt/tomcat/webapps
                     
-                    ssh ec2-user@172.16.10.246 /opt/tomcat/bin/shutdown.sh
+                    ssh ec2-user@172.16.10.249 /opt/tomcat/bin/shutdown.sh
                     
-                    ssh ec2-user@172.16.10.246 /opt/tomcat/bin/startup.sh
+                    ssh ec2-user@172.16.10.249 /opt/tomcat/bin/startup.sh
                 
                 """
             }
